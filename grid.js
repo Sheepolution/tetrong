@@ -1,6 +1,6 @@
 Grid = Class.extend("Grid");
 
-Grid.init = function () {
+Grid.init = function (n) {
 	this.smallPieces = baa.group.new();
 	this.data = [
 	[1,0,0,0,0,0,0,0,0,0,0,1],
@@ -23,10 +23,18 @@ Grid.init = function () {
 	[1,0,0,0,0,0,0,0,0,0,0,1]
 	];
 
+	if (n == 1) {
+		this.x = 304;
+	}
+	else {
+		this.x = 0;
+	}
+
 	this.piece = Piece.new();
 	this.piece.setGrid(this);
 
-	this.collisionGroup = baa.group.new();
+
+	// this.collisionGroup = baa.group.new();
 	// this.insert(this.piece);
 }
 
@@ -47,12 +55,17 @@ Grid.draw = function () {
 
 Grid.checkAllowed = function (row,column) {
 	for (var i = row; i < row + this.piece.shapeHeight; i++) {
-		for (var j = column; j < column + this.piece.shapeWidth; j++) {
-			if (this.piece.shape[i - row][j - column] == 1) {
-				if (this.data[i][j]) {
-					return false;
+		if (i != 18) {
+			for (var j = column; j < column + this.piece.shapeWidth; j++) {
+				if (this.piece.shape[i - row][j - column]) {
+					if (this.data[i][j]) {
+						return false;
+					}
 				}
 			}
+		}
+		else {
+			return false;
 		}
 	}
 
@@ -63,7 +76,7 @@ Grid.checkGrounded = function () {
 	for (var i = this.piece.row; i < this.piece.row + this.piece.shapeHeight; i++) {
 		if (i != 17) {
 			for (var j = this.piece.column; j < this.piece.column + this.piece.shapeWidth; j++) {
-				if (this.piece.shape[i - this.piece.row][j - this.piece.column] == 1) {
+				if (this.piece.shape[i - this.piece.row][j - this.piece.column]) {
 					if (this.data[i+1][j] != 0) {
 						return true;
 					}
@@ -79,10 +92,10 @@ Grid.checkGrounded = function () {
 Grid.insert = function () {
 	for (var i = this.piece.row; i < this.piece.row + this.piece.shapeHeight; i++) {
 		for (var j = this.piece.column; j < this.piece.column + this.piece.shapeWidth; j++) {
-			if (this.piece.shape[i - this.piece.row][j - this.piece.column] == 1) {
-				var piece = Smallpiece.new(j * Piece.tileSize, i * Piece.tileSize, this.piece.kind);
+			if (this.piece.shape[i - this.piece.row][j - this.piece.column]) {
+				var piece = this.piece.shape[i - this.piece.row][j - this.piece.column];
 				this.data[i][j] = piece;
-				this.collisionGroup.add(piece);
+				Play.inst.solidObjects.add(piece);
 			}
 		}
 	}

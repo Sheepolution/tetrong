@@ -7,20 +7,30 @@ Play.init = function () {
 	this.background = baa.sprite.new();
 	this.background.setImage("images/background.png");
 	// this.background.alpha = 0.5;
-	this.grid = Grid.new(0);
 	this.solidObjects = baa.group.new();
-	// this.piece = Piece.new();
+
+	this.gridLeft = Grid.new(0);
+	this.gridRight = Grid.new(1);
+	this.grids = baa.group.new(this.gridLeft,this.gridRight)
+ 
+	this.ball = Ball.new();
+
+	this.solidObjects.add(this.ball);
+	
+	// this.piece = Piece.new();s
 }
 
 Play.update = function () {
 	// this.piece.update();
-	this.grid.update();
-	// this.solidObjects.resolveCollision(baa.group.others);
+	this.grids.update();
+	this.ball.update();
+	this.solidObjects.resolveCollision(this.ball);
 }
 
 Play.draw = function () {
 	this.drawBackground();
-	this.grid.draw();
+	this.grids.draw();
+	this.ball.draw();
 	// this.piece.draw();
 }
 

@@ -70,16 +70,13 @@ Class.extend = function (name) {
 Class.new = function () {
 	// print(this.__clone)
 	var self = this.__clone(this);
-	self.__superWasCalled = true;
-	// self.__clone = null;
-	// delete self.isClass;
+
 	if (!self.init) {
 		throw(this.type() + " has no constructor");
 	}
+
 	self.init.apply(self,arguments);
-	if (!self.__superWasCalled && self._names.length > 2) {
-		print("WARNING: super.init was not called in " + this.type());
-	}
+	
 	return self;
 }
 
@@ -105,9 +102,9 @@ Class.is = function (obj) {
 
 
 Class.type = function () {
-	if (this._names[this._names.length-1].length == 0) {
-		throw("Add a type name! class:extend([TYPE])");
-	}
+	// if (this._names[this._names.length-1].length == null) {
+	// 	throw("Add a type name! class:extend([TYPE])");
+	// }
 	return this._names[this._names.length-1];
 }
 
@@ -605,17 +602,6 @@ baa.entity.separateAxis = function (e, a) {
 		}
 		e.velocity[a] = e.velocity[a] * -e.bounce[a];
 	}
-	// else if (this.separatePriority == e.separatePriority) {
-	// 	print("??");
-	// 	if ((e.last[a] + e.last[s] / 2) < (this.last[a] + this.last[s] / 2)) {
-	// 		e[a] = this[a] - e[s];
-	// 	}
-	// 	else {
-	// 		e[a] = this[a] + this[s];
-	// 	}
-	// 	e.velocity[a] = e.velocity[a] * -e.bounce[a];
-	// 	this.velocity[a] = this.velocity[a] * -this.bounce[a];
-	// }
 	else {
 		e.separateAxis(this, a);
 	}
@@ -960,7 +946,7 @@ baa.graphics._draw = function (img,x,y,r,sx,sy,ox,oy,kx,ky,quad) {
 	this.ctx.imageSmoothingEnabled = img.smooth;
 	this.ctx.mozImageSmoothingEnabled = img.smooth;
 	this.ctx.oImageSmoothingEnabled = img.smooth;;
-	this.ctx.webkitImageSmoothingEnabled = img.smooth;
+	// this.ctx.webkitImageSmoothingEnabled = img.smooth;
 	this.ctx.save();
 	this.ctx.transform(1,ky,kx,1,0,0);
 	this.ctx.translate(x,y);
@@ -2075,6 +2061,7 @@ baa.group.add = function (obj) {
 			for (var i = 0; i < arguments.length; i++) {
 				this[this.length] = arguments[i];
 				this.length++;
+				// print(arguments[i].type());
 				for (key in arguments[i]) {
 					if (!this.hasOwnProperty(key)) {
 						if (typeof(arguments[i][key]) == "function") {

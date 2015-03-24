@@ -18,20 +18,14 @@ baa.config = function (t) {
 }
 
 baa.graphics.preload(
-"images/piece_1.png",
-"images/piece_2.png",
-"images/piece_3.png",
-"images/piece_4.png",
-"images/piece_5.png",
-"images/piece_6.png",
-"images/piece_7.png",
+"images/smallpiece_0.png",
 "images/smallpiece_1.png",
 "images/smallpiece_2.png",
 "images/smallpiece_3.png",
 "images/smallpiece_4.png",
 "images/smallpiece_5.png",
 "images/smallpiece_6.png",
-"images/smallpiece_7.png",
+"images/ball.png",
 "images/background.png"
 );
 
