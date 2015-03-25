@@ -1,11 +1,37 @@
 Game = Class.extend();
 
 Game.init = function () {
+	this.theme = baa.audio.newSource("audio/theme.ogg");
+	this.theme.play();
+	this.theme.setVolume(0.3);
+	this.theme.setLooping(true);
+
 	this.state = Play.new();
+	this.paused = false;
 }
 
 Game.update = function () {
-	this.state.update();
+	if (baa.keyboard.isPressed("p")) {
+		this.paused = !this.paused;
+		if (this.paused) {
+			this.theme.pause();
+		}
+		else {
+			this.theme.play();
+		}
+	}
+	if (baa.keyboard.isPressed("m")) {
+		if (this.theme.isPlaying()) {
+			this.theme.pause();
+		}
+		else {
+			this.theme.play();
+		}
+	}
+
+	if (!this.paused) {
+		this.state.update();
+	}
 }
 
 Game.draw = function () {

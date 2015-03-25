@@ -49,7 +49,7 @@ Piece.init = function () {
 		for (var j = 0; j < Piece.shapes[this.kind][i].length; j++) {
 			if (Piece.shapes[this.kind][i][j] == 1) {
 				var img = Smallpiece.new(j * Piece.tileSize,
-										 i * Piece.tileSize,this.kind);
+										 i * Piece.tileSize,this.kind,this);
 				
 				this.groupImage.add(img);
 				this.shape[i][j] = img;
@@ -59,13 +59,15 @@ Piece.init = function () {
 		}
 	}
 
+
+
 	this.timeManager = baa.timeManager.new(this);
-	this.timerFall = this.timeManager.newTimer(0.5,true,null,"fall");
-	this.timerActiveFastLeft = this.timeManager.newTimer(0.3,false,function (self) { return baa.keyboard.isDown("left"); },"activeFastLeft");
-	this.timerActiveFastRight = this.timeManager.newTimer(0.3,false,function (self) { return baa.keyboard.isDown("right"); },"activeFastRight");
-	this.timerFastLeft = this.timeManager.newTimer(0.05,true,function (self) { return baa.keyboard.isDown("left") && self.isFastLeft},"moveLeft");
-	this.timerFastRight = this.timeManager.newTimer(0.05,true,function (self) { return baa.keyboard.isDown("right") && self.isFastRight},"moveRight");
-	this.timerFastFall = this.timeManager.newTimer(0.03,true,function (self) { return baa.keyboard.isDown("down")},"fall")
+	this.timerFall = this.timeManager.newTimer(0.6,true,null,"fall");
+	this.timerActiveFastLeft = this.timeManager.newTimer(0.3,false,function (self) { return baa.keyboard.isDown(self.keys.left); },"activeFastLeft");
+	this.timerActiveFastRight = this.timeManager.newTimer(0.3,false,function (self) { return baa.keyboard.isDown(self.keys.right); },"activeFastRight");
+	this.timerFastLeft = this.timeManager.newTimer(0.05,true,function (self) { return baa.keyboard.isDown(self.keys.left) && self.isFastLeft},"moveLeft");
+	this.timerFastRight = this.timeManager.newTimer(0.05,true,function (self) { return baa.keyboard.isDown(self.keys.right) && self.isFastRight},"moveRight");
+	this.timerFastFall = this.timeManager.newTimer(0.1,true,function (self) { return baa.keyboard.isDown(self.keys.down)},"fall")
 
 	// this.x = 0;
 	// this.y = 0;
@@ -76,11 +78,19 @@ Piece.init = function () {
 	this.isFastLeft = false;
 	this.isFastRight = false;
 
-	this.row = 1;
-	this.column = 1;
+	this.row = 0;
+	this.column = 4;
 	// this.updateGroup();
 
 	this.active = true;
+
+	this.keys = {
+		up : "up",
+		down : "down",
+		left : "left",
+		right :"right",
+	}
+
 
 }
 
@@ -88,29 +98,29 @@ Piece.update = function () {
 	if (this.active) {
 		this.timeManager.update();
 
-		if (baa.keyboard.isPressed("left")) {
+		if (baa.keyboard.isPressed(this.keys.left)) {
 			this.moveLeft();
 		}
 
-		if (baa.keyboard.isPressed("right")) {
+		if (baa.keyboard.isPressed(this.keys.right)) {
 			this.moveRight();
 		}
 
-		if (!baa.keyboard.isDown("left")) {
+		if (!baa.keyboard.isDown(this.keys.left)) {
 			this.isFastLeft = false;
 			this.timerActiveFastLeft.reset()
 		}
 
-		if (!baa.keyboard.isDown("right")) {
+		if (!baa.keyboard.isDown(this.keys.right)) {
 			this.isFastRight = false;
 			this.timerActiveFastRight.reset()
 		}
 
-		if (baa.keyboard.isPressed("down")) {
+		if (baa.keyboard.isPressed(this.keys.down)) {
 			this.fall();
 		}
 
-		if (baa.keyboard.isPressed(" ")) {
+		if (baa.keyboard.isPressed(this.keys.up)) {
 			this.rotate();
 			if (!this.grid.checkAllowed(this.row,this.column)) {
 				this.rotate();
@@ -167,6 +177,9 @@ Piece.move = function (_row, _column) {
 		this.row += _row;
 		this.column += _column;
 
+		// this.x += _column * Smallpiece.tileSize;
+		// this.y += _row * Smallpiece.tileSize;
+
 		this.updateGroup();
 	}
 }
@@ -192,6 +205,9 @@ Piece.rotate = function () {
 	var oldWidth = this.shapeWidth;
 	this.shapeWidth = this.shapeHeight;
 	this.shapeHeight = oldWidth;
+
+	this.height = this.shapeHeight * Piece.tileSize;
+	this.width = this.shapeWidth * Piece.tileSize;
 
 	this.updateGroup();
 }

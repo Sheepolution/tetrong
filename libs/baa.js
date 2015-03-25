@@ -1406,15 +1406,15 @@ baa.audio._source = Class.extend("baa.audio.source");
 
 baa.audio._source.init = function (url) {
 	baa._checkType("url",url,"string");
-	this.audio = this.sources[url];
+	this.audio = baa.audio.sources[url];
 	this.stopped = false;
-	this.animPlaying = false;
+	this.playing = false;
 }
 
 baa.audio._source.play = function () {
 	this.audio.play();
 	this.stopped = false;
-	this.animPlaying = true;
+	this.playing = true;
 }
 
 baa.audio._source.stop = function () {
@@ -1425,13 +1425,13 @@ baa.audio._source.stop = function () {
 
 baa.audio._source.pause = function () {
 	this.audio.pause();
-	this.audio.playing = false;
+	this.playing = false;
 }
 
 baa.audio._source.resume = function () {
 	if (this.audio.currentTime>0) {
 		this.audio.play();
-		this.animPlaying = true;
+		this.playing = true;
 	}
 }
 
@@ -1458,7 +1458,7 @@ baa.audio._source.setLooping = function (loop) {
 }
 
 baa.audio._source.isPlaying = function () {
-	return this.audio.playing;
+	return this.playing;
 }
 
 baa.audio._source.isPaused = function () {
@@ -2041,6 +2041,10 @@ baa.utils.random = function (s,e,d) {
 	}
 }
 
+baa.utils.choose = function (arr) {
+	return arr[Math.floor(Math.random()*arr.length)];
+}
+
 
 ///////////
 // Group //
@@ -2099,6 +2103,31 @@ baa.group.add = function (obj) {
 }
 
 baa.group.remove = function (obj) {
+	if (obj == null) { return false; }
+	var dead;
+	if (typeof(obj) == "object") {
+		for (var i=0; i < this.length; i++) {
+			if (this[i] == obj) {
+				dead = i;
+				break;
+			}
+		}
+		// print("dead");
+		this[dead] = null;
+	}
+	else {
+		this[obj] = null;
+		dead = obj;
+	}
+	for (var i = dead+1; i < this.length; i++) {
+		this[i-1] = this[i];
+	}
+	this.length--;
+	this[this.length] = null;
+	// print(this.length)
+}
+
+baa.group.remove = function (obj) {
 	var dead;
 	if (typeof(obj) == "object") {
 		for (var i=0; i < this.length; i++) {
@@ -2120,6 +2149,13 @@ baa.group.remove = function (obj) {
 	this[this.length] = null;
 }
 
+
+
+// [a,b,c,e,f,g,h,h]
+
+// remove d
+
+// d = null
 
 baa.group.makeFunc = function (k) {
 	this[k] = function () {
@@ -2202,6 +2238,16 @@ baa.group.find = function (f) {
 		}
 	}
 	return null;
+}
+
+baa.group.prepare = function (obj) {
+	for (key in obj) {
+		if (!this.hasOwnProperty(key)) {
+			if (typeof(obj[key]) == "function") {
+				this.makeFunc(key);
+			}
+		}
+	}
 }
 
 
@@ -2838,10 +2884,17 @@ baa.debug.windows = baa.group.new(baa.debug._window.new(100,107,300,200));
 //Het main window moet 'game' bevatten.
 
 
-//todo
-//Put stuff from Entity to sprite (Done)
+//List of stuff to add:
+/*
+Group:
+	Group.refresh/reset : remove all elements from the group (functions stay)
 
-//debug (DONE)
-//timer (DONE)
-//tween (DONE)
-//Make a fucking game!!
+
+
+
+
+
+
+
+
+ */

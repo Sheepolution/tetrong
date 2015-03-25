@@ -1,6 +1,6 @@
 baa.load = function () {
 	game = Game.new();
-	// baa.debug.set(game);
+	baa.debug.set(game);
 }
 
 baa.update = function () {
@@ -26,8 +26,17 @@ baa.graphics.preload(
 "images/smallpiece_5.png",
 "images/smallpiece_6.png",
 "images/ball.png",
-"images/background.png"
+"images/background.png",
+"images/numbers.png",
+"images/gameoverbar.png"
 );
+
+baa.audio.preload(
+"audio/theme.ogg",
+"audio/pong_beep.ogg",
+"audio/pong_peep.ogg",
+"audio/pong_plop.ogg"
+)
 
 
 baa.run();
