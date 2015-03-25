@@ -17,6 +17,9 @@ Ball.init = function () {
 	this.peep = baa.audio.newSource("audio/pong_peep.ogg");
 	this.plop = baa.audio.newSource("audio/pong_plop.ogg");
 
+	// this.beep.setVolume(0); 
+	// this.peep.setVolume(0); 
+	// this.plop.setVolume(0);
 	this.beep.setPitch(1.4);
 
 
@@ -28,28 +31,6 @@ Ball.init = function () {
 
 Ball.update = function () {
 	Ball.super.update(this);
-
-	if (this.x < -10) {
-		this.peep.play();
-		this.x = 200;
-		this.y = 72;
-		this.velocity.x = -100;
-		this.velocity.y = 100;
-
-		this.pauseTimer.reset();
-		Play.inst.score2.setScore(1,true);
-	}
-	else if (this.x > 400) {
-		this.peep.play();
-		this.x = 200;
-		this.y = 72;
-		this.velocity.x = 100;
-		this.velocity.y = 100;
-
-		this.pauseTimer.reset();
-		Play.inst.score1.setScore(1,true);
-
-	}
 
 	if (this.bottom() > 144) {
 		this.velocity.y = -Math.abs(this.velocity.y);
@@ -63,22 +44,74 @@ Ball.update = function () {
 		this.plop.play();
 	}
 
-
-	if (Play.inst.gridLeft.gameover) {
-		if (this.x < 88) {
-			this.x = 88;
+	if (Play.inst.inMenu || Play.inst.gameover) {
+		if (this.x < 96) {
+			this.x = 96;
+			this.plop.play();
 			this.velocity.x = Math.abs(this.velocity.x);
 		}
-	}
-
-	if (Play.inst.gridRight.gameover) {
-		if (this.x > 308 ) {
-			this.x = 308 ;
+		else if (this.x > 300 ) {
+			this.x = 300 ;
+			this.plop.play();
 			this.velocity.x = -Math.abs(this.velocity.x);
 		}
 	}
+	else {
+		if (this.x < -10) {
+			// this.peep.play();
+			this.x = 200;
+			this.y = 72;
+			this.velocity.x = -100;
+			this.velocity.y = 100;
 
+			this.pauseTimer.reset();
+			Play.inst.score2.setScore(1,true);
+		}
+		else if (this.x > 400) {
+			// this.peep.play();
+			this.x = 200;
+			this.y = 72;
+			this.velocity.x = 100;
+			this.velocity.y = 100;
 
+			this.pauseTimer.reset();
+			Play.inst.score1.setScore(1,true);
+
+		}
+
+		
+		if (Play.inst.singleplayer) {
+			if (this.x < 200) {
+				this.x = 200;
+				this.plop.play();
+				this.velocity.x = Math.abs(this.velocity.x);
+			}
+		}
+		else if (Play.inst.gridLeft.gameover) {
+			if (this.x < 96) {
+				this.x = 96;
+				this.plop.play();
+				this.velocity.x = Math.abs(this.velocity.x);
+			}
+		}
+
+		if (Play.inst.gridRight.gameover) {
+			if (this.x > 300 ) {
+				this.x = 300 ;
+				this.plop.play();
+				this.velocity.x = -Math.abs(this.velocity.x);
+			}
+		}
+	}
+
+}
+
+Ball.reset = function () {
+	this.x = 200;
+	this.y = 72;
+
+	this.velocity.x = -100;
+	this.velocity.y = 100;
 }
 
 // Ball.onOverlap = function (e) {

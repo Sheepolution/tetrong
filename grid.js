@@ -223,9 +223,14 @@ Grid.fillBoard = function () {
 			this.fillComplete = false;
 			this.fillingLine = 17;
 		}
-		// this.gameover = false;
-		// this.fillGroup
 	}
+}
+
+Grid.resetFillBoard = function () {
+	this.fillGroup = baa.group.new();
+	this.fillGroup.prepare(baa.sprite.new());
+	this.fillingLine = 17;
+	this.fillingComplete = false;
 }
 
 Grid.refresh = function () {

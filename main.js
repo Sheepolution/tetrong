@@ -28,7 +28,12 @@ baa.graphics.preload(
 "images/ball.png",
 "images/background.png",
 "images/numbers.png",
-"images/gameoverbar.png"
+"images/gameoverbar.png",
+"images/logo.png",
+"images/players.png",
+"images/cursor.png",
+"images/gameover.png",
+"images/gamewin.png"
 );
 
 baa.audio.preload(

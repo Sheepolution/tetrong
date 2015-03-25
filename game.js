@@ -6,8 +6,9 @@ Game.init = function () {
 	this.theme.setVolume(0.3);
 	this.theme.setLooping(true);
 
-	this.state = Play.new();
+	this.state = Play.new(true);
 	this.paused = false;
+	this.timeManager = baa.timeManager.new(this);
 }
 
 Game.update = function () {

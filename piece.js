@@ -37,7 +37,7 @@ Piece.init = function () {
 	this.shapeWidth = 0;
 	this.shapeHeight = 0;
 
-	this.kind = baa.utils.random(0,6);
+	this.kind = baa.utils.random(1,6);
 
 	this.shape = [[],[],[],[]];
 
@@ -49,7 +49,7 @@ Piece.init = function () {
 		for (var j = 0; j < Piece.shapes[this.kind][i].length; j++) {
 			if (Piece.shapes[this.kind][i][j] == 1) {
 				var img = Smallpiece.new(j * Piece.tileSize,
-										 i * Piece.tileSize,this.kind,this);
+										 i * Piece.tileSize,this.kind,this,i,j);
 				
 				this.groupImage.add(img);
 				this.shape[i][j] = img;
@@ -211,3 +211,16 @@ Piece.rotate = function () {
 
 	this.updateGroup();
 }
+
+// Piece.remove = function (obj) {
+// 	this.groupImage.remove(obj);
+// 	Play.inst.solidObjects.remove(obj);
+// 	print(obj.localRow,obj.localColumn,this.shape[obj.localRow][obj.localColumn] == obj);
+// 	this.shape[obj.localRow][obj.localColumn] = 0;
+// 	if (this.x < 200) {
+// 		Play.inst.gridLeft.data[this.row + obj.localRow, this.column + obj.localColumn] = 0;
+// 	}
+// 	else {
+// 		Play.inst.gridRight.data[this.row + obj.localRow, this.column + obj.localColumn] = 0;
+// 	}
+// }
