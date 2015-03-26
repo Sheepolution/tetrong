@@ -37,7 +37,7 @@ Piece.init = function () {
 	this.shapeWidth = 0;
 	this.shapeHeight = 0;
 
-	this.kind = baa.utils.random(6,6);
+	this.kind = baa.utils.random(0,6);
 
 	this.shape = [[],[],[],[]];
 
@@ -67,7 +67,7 @@ Piece.init = function () {
 	this.timerActiveFastRight = this.timeManager.newTimer(0.3,false,function (self) { return baa.keyboard.isDown(self.keys.right); },"activeFastRight");
 	this.timerFastLeft = this.timeManager.newTimer(0.05,true,function (self) { return baa.keyboard.isDown(self.keys.left) && self.isFastLeft},"moveLeft");
 	this.timerFastRight = this.timeManager.newTimer(0.05,true,function (self) { return baa.keyboard.isDown(self.keys.right) && self.isFastRight},"moveRight");
-	this.timerFastFall = this.timeManager.newTimer(0.1,true,function (self) { return baa.keyboard.isDown(self.keys.down)},"fall")
+	this.timerFastFall = this.timeManager.newTimer(0.07,true,function (self) { return baa.keyboard.isDown(self.keys.down)},"fall")
 
 	// this.x = 0;
 	// this.y = 0;

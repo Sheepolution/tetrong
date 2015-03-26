@@ -5,7 +5,15 @@ Play.inst;
 Play.init = function () {
 	Play.inst = this;
 
+	this.theme = baa.audio.newSource("audio/theme.ogg");
+	// this.theme.play();
+	this.theme.setVolume(0.6);
+	this.theme.setLooping(true);
 
+	this.introTheme = baa.audio.newSource("audio/intro.mp3");
+	this.introTheme.setVolume(0.5);
+	this.introTheme.setLooping(true);
+	this.introTheme.play();
 
 	this.background = baa.sprite.new();
 	this.background.setImage("images/background.png");
@@ -41,6 +49,9 @@ Play.init = function () {
 	this.showGameOver = false;
 	this.imgGameOver = baa.graphics.newImage("images/gameover.png");
 	this.imgGameWin = baa.graphics.newImage("images/gamewin.png");
+
+	this.gateSound = baa.audio.newSource("audio/gate.mp3");
+	this.gameoverSound = baa.audio.newSource("audio/gameover.mp3");
 
 	
 	// this.piece = Piece.new();s
@@ -88,6 +99,8 @@ Play.update = function () {
 			this.gridRight.gameover = true;
 			this.gridRight.resetFillBoard();
 			this.player1Won = false;
+			this.gateSound.play();
+			this.theme.stop();
 		}
 		else if (this.score2.score >= 10) {
 			this.gameover = true;
@@ -98,11 +111,14 @@ Play.update = function () {
 			this.gridRight.gameover = true;
 			this.gridRight.resetFillBoard();
 			this.player1Won = true;
+			this.gateSound.play();
+			this.theme.stop();
 		}
 	}
 	else if (this.gameover) {
 		if (this.gridRight.fillComplete) {
 			this.showGameOver = true;
+			this.gameoverSound.play();
 		}
 	}
 
@@ -141,6 +157,12 @@ Play.draw = function () {
 		baa.graphics.rectangle("fill",313,0,78,300);
 		this.players.draw(330,45);
 		this.cursor.draw(320,this.selectedPlayer1 ? 45 : 80);
+		baa.graphics.setFont(creditsFont);
+		baa.graphics.print("Made by  Daniël Haazen","center",80,52,10);
+		baa.graphics.print("@Sheepolution","center",80,52,32);
+		baa.graphics.print("Except the Tetris art, owned by Nintendo®","center",80,52,48);
+		baa.graphics.print("Made for MiniLD #58","center",80,52,93);
+		baa.graphics.print("Special thanks to Bitslap","center",80,52,120);
 	}
 
 	this.ball.draw();
@@ -165,6 +187,8 @@ Play.newPiece = function () {
 }
 
 Play.startGame = function () {
+	this.introTheme.stop();
+	this.theme.play();
 	this.ball.reset();
 	this.gridRight = Grid.new(1);
 	if (this.singleplayer) {

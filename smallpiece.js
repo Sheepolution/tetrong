@@ -85,7 +85,6 @@ Smallpiece.onOverlap = function (ball) {
 	// }
 	// else {
 	// }
-
 		Smallpiece.super.onOverlap(this,ball);
 	// Play.inst.solidObjects.remove(this);
 	// this.parent.remove(this);

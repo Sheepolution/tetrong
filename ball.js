@@ -25,12 +25,21 @@ Ball.init = function () {
 
 	this.seperatePriority = 0;
 	this.timerManager = baa.timeManager.new(this);
-	this.pauseTimer = this.timerManager.newTimer(3,false);
+	this.teleTimer = this.timerManager.newTimer(5,true,function (self) {
+		return self.x > 300 || self.x < 96;	
+	},"reset");
 	// this.angles = []
 }
 
 Ball.update = function () {
 	Ball.super.update(this);
+
+	this.teleTimer.update();
+
+	if (this.x < 300 && this.x > 96) {
+		this.teleTimer.reset();
+		// print(dt);
+	};
 
 	if (this.bottom() > 144) {
 		this.velocity.y = -Math.abs(this.velocity.y);
@@ -59,22 +68,14 @@ Ball.update = function () {
 	else {
 		if (this.x < -10) {
 			// this.peep.play();
-			this.x = 200;
-			this.y = 72;
-			this.velocity.x = -100;
-			this.velocity.y = 100;
+			this.reset();
 
-			this.pauseTimer.reset();
 			Play.inst.score2.setScore(1,true);
 		}
 		else if (this.x > 400) {
 			// this.peep.play();
-			this.x = 200;
-			this.y = 72;
-			this.velocity.x = 100;
-			this.velocity.y = 100;
+			this.reset();
 
-			this.pauseTimer.reset();
 			Play.inst.score1.setScore(1,true);
 
 		}
@@ -110,8 +111,8 @@ Ball.reset = function () {
 	this.x = 200;
 	this.y = 72;
 
-	this.velocity.x = -100;
-	this.velocity.y = 100;
+	this.velocity.x = baa.utils.choose([70,80,90,100,110,120,130]);
+	this.velocity.y = (200 - this.velocity.x) * baa.utils.choose([-1,1]);
 }
 
 // Ball.onOverlap = function (e) {

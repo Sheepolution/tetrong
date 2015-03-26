@@ -537,7 +537,7 @@ baa.entity.update = function () {
 
 baa.entity.draw = function () {
 	baa.entity.super.draw(this);
-	if (baa.debug.active) {
+	if (baa.debug && baa.debug.active) {
 		this.drawDebug();
 	}
 
@@ -1039,7 +1039,7 @@ baa.graphics._font.init = function (name,size,style,height) {
 	this.name = name;
 	this.size = size;
 	this.style = style || "normal";
-	this.height = height==null ? size : height;
+	this.height = height==null ? size*2 : height;
 }
 
 baa.graphics._font.setSize = function (size) {
@@ -1367,7 +1367,7 @@ baa.graphics._resetFont = function () {
 
 baa.audio = {};
 baa.audio.sources = {};
-baa.masterVolume = 1;
+baa.audio.masterVolume = 1;
 
 baa.audio.preload = function () {
 	for (var i = 0; i < arguments.length; i++) {
@@ -1420,6 +1420,12 @@ baa.audio.resume = function (source) {
 	}
 }
 
+baa.audio.setVolume = function (volume) {
+	baa._checkType("volume",volume,"number");
+	this.masterVolume = volume;
+}
+
+
 //New functions
 
 baa.audio._source = Class.extend("baa.audio.source");
@@ -1432,9 +1438,12 @@ baa.audio._source.init = function (url) {
 }
 
 baa.audio._source.play = function () {
+	var oVol = this.audio.volume;
+	this.audio.volume *= baa.audio.masterVolume;
 	this.audio.play();
 	this.stopped = false;
 	this.playing = true;
+	this.audio.volume = oVol;
 }
 
 baa.audio._source.stop = function () {
@@ -1812,6 +1821,10 @@ baa.run = function () {
 				baa.graphics.width = baa.graphics.canvas.width;
 				baa.graphics.height = baa.graphics.canvas.height;
 				baa.filesystem.identity = typeof(conf.identity) == "string" ? conf.identity + "/" : null;
+				if (conf.release) {
+					baa.debug = null;
+					baa.typesafe = false;
+				}
 			}
 			baa.graphics.imageSmoothingEnabled = true;
 			baa.graphics.ctx.strokeStyle = baa.graphics._rgb(255,255,255);
@@ -1837,7 +1850,9 @@ baa.loop = function (time) {
 	if (baa.update) {
 		baa.update();
 	}
- 	baa.debug.update();
+	if (baa.debug) {
+	 	baa.debug.update();
+	}
 	baa.keyboard._pressed = [];
 	baa.keyboard._released = [];
 	baa.mouse._pressed = [];
@@ -1859,7 +1874,9 @@ baa.graphics.drawloop = function (a) {
 		this.setFont(this.newFont("arial",10));
 	 	baa.draw();
 		this.origin();
-	 	baa.debug.draw();
+		if (baa.debug) {
+		 	baa.debug.draw();
+		}
 	}
 }
 

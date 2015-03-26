@@ -1,6 +1,9 @@
 baa.load = function () {
 	game = Game.new();
-	baa.debug.set(game);
+	creditsFont = baa.graphics.setNewFont("credits",4);
+	// baa.debug.set(game);
+
+	print("If you want to screw with the game settings, let me help. \nType: \nBall.reset = function () { \nthis.x = 200; \nthis.y = 72; \nthis.velocity.x = [NUMBER HERE]; \nthis.velocity.y = [NUMBER HERE]; \n}");
 }
 
 baa.update = function () {
@@ -14,7 +17,7 @@ baa.draw = function () {
 
 baa.config = function (t) {
 	t.height = 288;
-
+	t.release = true;
 }
 
 baa.graphics.preload(
@@ -40,7 +43,12 @@ baa.audio.preload(
 "audio/theme.ogg",
 "audio/pong_beep.ogg",
 "audio/pong_peep.ogg",
-"audio/pong_plop.ogg"
+"audio/pong_plop.ogg",
+"audio/line4.ogg",
+"audio/line.mp3",
+"audio/intro.mp3",
+"audio/gate.mp3",
+"audio/gameover.mp3"
 )
 
 

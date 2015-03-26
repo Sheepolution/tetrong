@@ -56,6 +56,11 @@ Grid.init = function (n) {
 
 	this.piece.setGrid(this);
 
+	this.gateSound = baa.audio.newSource("audio/gate.mp3");
+
+	this.line4CompleteSound = baa.audio.newSource("audio/line4.ogg");
+
+	this.lineCompleteSound = baa.audio.newSource("audio/line.mp3");
 
 
 	// this.collisionGroup = baa.group.new();
@@ -109,6 +114,7 @@ Grid.checkGrounded = function () {
 				if (this.piece.shape[i - this.piece.row][j - this.piece.column]) {
 					if (this.data[i][j] != 0) {
 						this.gameover = true;
+						this.gateSound.play();
 					}
 					if (this.data[i+1][j] != 0) {
 						grounded = true;
@@ -164,6 +170,14 @@ Grid.checkForCompleteLines = function () {
 		}
 	}
 
+	if (completeLines.length == 4) {
+		this.line4CompleteSound.play();
+	}
+	else if (completeLines.length > 0) {
+		this.lineCompleteSound.play();
+	}
+
+
 
 	for (var i = 0; i < completeLines.length; i++) {
 		for (var j = 1; j < this.data[completeLines[i]].length-1; j++) {
@@ -183,8 +197,13 @@ Grid.checkForCompleteLines = function () {
 			}
 		}
 	}
+	if (Play.inst.singleplayer) {
+		var score = completeLines.length == 4 ? 5 : completeLines.length;
+	}
+	else {
+		var score = completeLines.length == 4 ? 2 : completeLines.length > 0 ? 0.25 : 0;
+	}
 
-	var score = completeLines.length == 4 ? 2 : completeLines.length > 0 ? 0.25 : 0;
 	if (this.x < 200) {
 		Play.inst.score1.setScore(score,true);
 	}
