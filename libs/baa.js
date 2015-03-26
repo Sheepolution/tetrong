@@ -380,6 +380,7 @@ baa.sprite.draw = function () {
 		this.image.draw(this.frames[this.currentFrame-1],
 		this.x+this.offset.x + this.origin.x,this.y+this.offset.y + this.origin.y,
 		this.rotation,this.scale.x,this.scale.y,this.origin.x,this.origin.y)
+		baa.graphics.setAlpha(1);
 	}
 }
 
@@ -532,6 +533,25 @@ baa.entity.init = function (x,y,w,h) {
 baa.entity.update = function () {
 	baa.entity.super.update(this);
 	this.updateMovement();
+}
+
+baa.entity.draw = function () {
+	baa.entity.super.draw(this);
+	if (baa.debug.active) {
+		this.drawDebug();
+	}
+
+}
+
+baa.entity.drawDebug = function () {
+	baa.graphics.setAlpha(0.5);
+	baa.graphics.setColor(100,255,0);
+	baa.graphics.setLineWidth(0.5);
+	baa.graphics.rectangle("line",this.last.x,this.last.y,this.last.width,this.last.height);
+
+	baa.graphics.setAlpha(1);
+	baa.graphics.setColor(255,0,0);
+	baa.graphics.rectangle("line",this.x,this.y,this.width,this.height);
 }
 
 baa.entity.updateMovement = function () {
@@ -2644,35 +2664,35 @@ baa.debug._window.update = function () {
 	}
 
 	this.scrollbar.y = this.y + (this.position * (this.height/(this.numberOfVars)))+2;
+	if (baa.keyboard.isDown("shift")) {
+		if (baa.keyboard.isDown("down")) {
+			this.height += 500 * dt;
+			this.maxVars = Math.floor(13*(this.height/200));
+			this.scrollbarBG.height = this.height;
+			this.scrollbar.height = (12/this.numberOfVars) * this.height;
 
-	if (baa.keyboard.isDown("down")) {
-		this.height += 500 * dt;
-		this.maxVars = Math.floor(13*(this.height/200));
-		this.scrollbarBG.height = this.height;
-		this.scrollbar.height = (12/this.numberOfVars) * this.height;
-
+		}
+		if (baa.keyboard.isDown("up")) {
+			this.height -= 500 * dt;
+			this.maxVars = Math.floor(13*(this.height/200));
+			this.scrollbarBG.height = this.height;
+			this.scrollbar.height = (12/this.numberOfVars) * this.height;
+		}
+		if (baa.keyboard.isDown("right")) {
+			this.width += 500 * dt;
+			this.selector.width += 500 * dt;
+			this.titleBar.width += 500 * dt;
+			this.scrollbarBG.x = this.x + this.width;
+			this.scrollbar.x = this.scrollbarBG.x + 3;
+		}
+		if (baa.keyboard.isDown("left")) {
+			this.width -= 500 * dt;
+			this.selector.width -= 500 * dt;
+			this.titleBar.width -= 500 * dt;
+			this.scrollbarBG.x = this.x + this.width;
+			this.scrollbar.x = this.scrollbarBG.x + 3;
+		}
 	}
-	if (baa.keyboard.isDown("up")) {
-		this.height -= 500 * dt;
-		this.maxVars = Math.floor(13*(this.height/200));
-		this.scrollbarBG.height = this.height;
-		this.scrollbar.height = (12/this.numberOfVars) * this.height;
-	}
-	if (baa.keyboard.isDown("right")) {
-		this.width += 500 * dt;
-		this.selector.width += 500 * dt;
-		this.titleBar.width += 500 * dt;
-		this.scrollbarBG.x = this.x + this.width;
-		this.scrollbar.x = this.scrollbarBG.x + 3;
-	}
-	if (baa.keyboard.isDown("left")) {
-		this.width -= 500 * dt;
-		this.selector.width -= 500 * dt;
-		this.titleBar.width -= 500 * dt;
-		this.scrollbarBG.x = this.x + this.width;
-		this.scrollbar.x = this.scrollbarBG.x + 3;
-	}
-
 
 }
 
@@ -2857,6 +2877,7 @@ baa.debug.draw = function () {
 	if (this.active) {
 		baa.debug.windows.draw();
 	}
+	baa.graphics.setColor(255,255,255);
 }
 
 baa.debug.set = function (v) {

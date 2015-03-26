@@ -19,6 +19,9 @@ Play.init = function () {
 
 	this.solidObjects.add(this.ball);
 
+	this.piecesRight = baa.group.new();
+	this.piecesRight.prepare(Smallpiece);
+
 	this.score1 = Score.new();
 	this.score1.oX = 140;
 	this.score2 = Score.new();
@@ -44,6 +47,8 @@ Play.init = function () {
 }
 
 Play.update = function () {
+
+	this.piecesRight.checkNeighbours(baa.group.others);
 
 	if (!this.inMenu && !this.showGameOver) {
 	// this.piece.update();

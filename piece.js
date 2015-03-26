@@ -37,7 +37,7 @@ Piece.init = function () {
 	this.shapeWidth = 0;
 	this.shapeHeight = 0;
 
-	this.kind = baa.utils.random(1,6);
+	this.kind = baa.utils.random(6,6);
 
 	this.shape = [[],[],[],[]];
 
@@ -159,7 +159,9 @@ Piece.fall = function () {
 	}
 	else {
 		// print("huh?");
+		this.active = false;
 		this.grid.insert();
+		this.groupImage.do(function (self) {self.last.clone(self);});
 		this.grid.newPiece();
 	}
 }
@@ -185,6 +187,7 @@ Piece.move = function (_row, _column) {
 }
 
 Piece.rotate = function () {
+	if (this.shapeWidth == 4 && this.row == 0) { return; }
 	var newShape = [[],[],[],[]];
 
 	for (var i = 0; i < this.shapeHeight; i++) {
@@ -202,9 +205,20 @@ Piece.rotate = function () {
 
 	this.shape = newShape;
 
+
 	var oldWidth = this.shapeWidth;
 	this.shapeWidth = this.shapeHeight;
 	this.shapeHeight = oldWidth;
+
+	if (this.shapeWidth == 4) {
+		this.column -= 1;
+		this.row += 1;
+	}
+	else if (this.shapeHeight == 4) {
+		this.column += 1;
+		this.row -= 1;
+	}
+	// this.row -= Math.floor(this.shapeHeight/2);
 
 	this.height = this.shapeHeight * Piece.tileSize;
 	this.width = this.shapeWidth * Piece.tileSize;

@@ -2,7 +2,7 @@ Game = Class.extend();
 
 Game.init = function () {
 	this.theme = baa.audio.newSource("audio/theme.ogg");
-	this.theme.play();
+	// this.theme.play();
 	this.theme.setVolume(0.3);
 	this.theme.setLooping(true);
 

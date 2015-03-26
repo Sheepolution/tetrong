@@ -174,7 +174,11 @@ Grid.checkForCompleteLines = function () {
 		for (var j = completeLines[i]; j > 1 ; j--) {
 			for (var k = 1; k < this.data[j].length-1; k++) {
 				var obj = this.data[j-1][k];
-				obj.y += Piece.tileSize;
+				if (obj) {
+					// print(obj,obj.y);
+					obj.y += Piece.tileSize;
+					obj.last.y += Piece.tileSize;
+				}
 				this.data[j][k] = this.data[j-1][k];
 			}
 		}
