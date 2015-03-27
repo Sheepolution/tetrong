@@ -38,7 +38,11 @@ Play.init = function () {
 	this.logo = baa.graphics.newImage("images/logo.png");
 
 	// this.car = Car.new();
-
+	this.choosingType = false;
+	this.choosingPlayers = true;
+	this.selectedTypeA = true;
+	this.typeA = true;
+	this.types = baa.graphics.newImage("images/types.png");
 	this.players = baa.graphics.newImage("images/players.png");
 	this.cursor = baa.graphics.newImage("images/cursor.png");
 	this.selectedPlayer1 = true;
@@ -71,13 +75,31 @@ Play.update = function () {
 	this.solidObjects.resolveCollision(this.ball);
 
 	if (this.inMenu) {
-		if (baa.keyboard.isPressed("up") || baa.keyboard.isPressed("down")) {
-			this.selectedPlayer1 = !this.selectedPlayer1;
-		}
+		if (this.choosingPlayers) {
+			if (baa.keyboard.isPressed("up") || baa.keyboard.isPressed("down")) {
+				this.selectedPlayer1 = !this.selectedPlayer1;
+			}
 
-		if (baa.keyboard.isPressed("return")) {
-			this.singleplayer = this.selectedPlayer1;
-			this.startGame();
+			if (baa.keyboard.isPressed("return")) {
+				this.singleplayer = this.selectedPlayer1;
+				this.choosingPlayers = false;
+				this.choosingType = true;
+			}
+		}
+		else if (this.choosingType) {
+			if (baa.keyboard.isPressed("up") || baa.keyboard.isPressed("down")) {
+				this.selectedTypeA = !this.selectedTypeA;
+			}
+			if (baa.keyboard.isPressed("escape")) {
+				this.choosingPlayers = true;
+				this.choosingType = false;
+			}
+			if (baa.keyboard.isPressed("return")) {
+				this.typeA = this.selectedTypeA;
+				this.choosingPlayers = false;
+				this.choosingType = false;
+				this.startGame();
+			}
 		}
 	}
 
@@ -155,12 +177,18 @@ Play.draw = function () {
 	else{
 		this.logo.draw(97,44);
 		baa.graphics.rectangle("fill",313,0,78,300);
-		this.players.draw(330,45);
-		this.cursor.draw(320,this.selectedPlayer1 ? 45 : 80);
+		if (this.choosingPlayers) {
+			this.players.draw(330,45);
+			this.cursor.draw(320,this.selectedPlayer1 ? 45 : 80);
+		}
+		else if (this.choosingType) {
+			this.types.draw(330,45);
+			this.cursor.draw(320,this.selectedTypeA ? 45 : 80);
+		}
 		baa.graphics.setFont(creditsFont);
 		baa.graphics.print("Made by  Daniël Haazen","center",80,52,10);
 		baa.graphics.print("@Sheepolution","center",80,52,32);
-		baa.graphics.print("Except the Tetris art, owned by Nintendo®","center",80,52,48);
+		baa.graphics.print("Except the Tetris stuff, owned by Nintendo®","center",80,52,48);
 		baa.graphics.print("Made for MiniLD #58","center",80,52,93);
 		baa.graphics.print("Special thanks to Bitslap","center",80,52,120);
 	}

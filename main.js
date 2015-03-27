@@ -36,7 +36,8 @@ baa.graphics.preload(
 "images/players.png",
 "images/cursor.png",
 "images/gameover.png",
-"images/gamewin.png"
+"images/gamewin.png",
+"images/types.png"
 );
 
 baa.audio.preload(

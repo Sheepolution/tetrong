@@ -141,6 +141,8 @@ Grid.insert = function () {
 			if (this.piece.shape[i - this.piece.row][j - this.piece.column]) {
 				var piece = this.piece.shape[i - this.piece.row][j - this.piece.column];
 				this.data[i][j] = piece;
+				piece.row = i;
+				piece.column = j;
 			}
 		}
 	}

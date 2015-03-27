@@ -10,6 +10,9 @@ Smallpiece.init = function (x,y,i,p,row,column) {
 	this.localRow = row;
 	this.localColumn = column;
 
+	this.row = 0;
+	this.column = 0;
+
 	this.parent = p;
 
 	// Play.inst.piecesRight.add(this);
@@ -85,9 +88,19 @@ Smallpiece.onOverlap = function (ball) {
 	// }
 	// else {
 	// }
-		Smallpiece.super.onOverlap(this,ball);
-	// Play.inst.solidObjects.remove(this);
-	// this.parent.remove(this);
+	Smallpiece.super.onOverlap(this,ball);
+
+	if (!Play.inst.typeA && !this.parent.active) {
+		Play.inst.solidObjects.remove(this);
+		if (this.parent.grid.x < 200) {
+			Play.inst.gridLeft.data[this.row][this.column] = 0;
+		}
+		else {
+			Play.inst.gridRight.data[this.row][this.column] = 0;
+		}
+
+	}
+	
 
 }
 

@@ -19,8 +19,7 @@ Score.init = function () {
 Score.draw = function () {
 	for (var i = 0; i < this.digits.length; i++) {
 		this.currentFrame = this.digits[i] + 1;
-		this.scale.x = 3;
-		this.scale.y = 3;
+	
 		this.x = this.oX + i * 20;
 		Score.super.draw(this);
 		// print(this.subScore);
@@ -28,10 +27,14 @@ Score.draw = function () {
 	}
 	if (!Play.inst.singleplayer) {
 		this.currentFrame = this.subScore + 1;
-		this.x += 40;
+		this.x += 20;
+		this.y += 8;
 		this.scale.x = 1;
 		this.scale.y = 1;
 		Score.super.draw(this);
+		this.y -= 8;
+		this.scale.x = 3;
+		this.scale.y = 3;
 	}
 }
 
