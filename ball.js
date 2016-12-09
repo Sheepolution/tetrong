@@ -111,8 +111,8 @@ Ball.reset = function () {
 	this.x = 200;
 	this.y = 72;
 
-	this.velocity.x = baa.utils.choose([70,80,90,100,110,120,130]);
-	this.velocity.y = (200 - this.velocity.x) * baa.utils.choose([-1,1]);
+	this.velocity.x = baa.utils.choose([70,80,90,100,110,120,130]) * baa.utils.choose([-1,1]);
+	this.velocity.y = (200 - Math.abs(this.velocity.x)) * baa.utils.choose([-1,1]);
 }
 
 // Ball.onOverlap = function (e) {
